@@ -1,2 +1,116 @@
-# website-
-disain web html
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        #game {
+            position: relative;
+            width: 600px;
+            height: 200px;
+            overflow: hidden;
+            background-color: #fff;
+            border: 2px solid #333;
+        }
+        #dino {
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            width: 40px;
+            height: 40px;
+            background-color: green;
+        }
+        .cactus {
+            position: absolute;
+            bottom: 0;
+            width: 20px;
+            height: 40px;
+            background-color: brown;
+            animation: move 1.5s linear infinite;
+        }
+        @keyframes move {
+            0% { right: -20px; }
+            100% { right: 600px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="dino"></div>
+    </div>
+    <script>
+        const dino = document.getElementById('dino');
+        const game = document.getElementById('game');
+        let isJumping = false;
+
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' && !isJumping) {
+                isJumping = true;
+                jump();
+            }
+        });
+
+        function jump() {
+            let position = 0;
+            const jumpInterval = setInterval(() => {
+                if (position >= 100) {
+                    clearInterval(jumpInterval);
+                    const fallInterval = setInterval(() => {
+                        if (position <= 0) {
+                            clearInterval(fallInterval);
+                            isJumping = false;
+                        }
+                        position -= 5;
+                        dino.style.bottom = position + 'px';
+                    }, 20);
+                }
+                position += 5;
+                dino.style.bottom = position + 'px';
+            }, 20);
+        }
+
+        function createCactus() {
+            const cactus = document.createElement('div');
+            cactus.classList.add('cactus');
+            game.appendChild(cactus);
+            cactus.style.left = '600px';
+
+            const cactusInterval = setInterval(() => {
+                let cactusPosition = parseInt(window.getComputedStyle(cactus).getPropertyValue('left'));
+                if (cactusPosition < -20) {
+                    clearInterval(cactusInterval);
+                    cactus.remove();
+                } else {
+                    cactus.style.left = cactusPosition - 5 + 'px';
+                }
+
+                // Collision detection
+                if (cactusPosition < 90 && cactusPosition > 50 && parseInt(dino.style.bottom) < 40) {
+                    alert('Game Over!');
+                    clearInterval(cactusInterval);
+                    cactus.remove();
+                }
+            }, 20);
+        }
+
+        setInterval(createCactus, 2000);
+    </script>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File 1</title>
+</head>
+<body>
+    <h1>HALLO!!</h1>
+    <p>MALFIN RADITYASA 21.</p>
+</body>
+</html>
